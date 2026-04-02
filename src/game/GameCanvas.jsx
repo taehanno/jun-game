@@ -2,6 +2,7 @@ import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { spawnFruit, updateFruits } from './fruits';
 import { applySlice, updateBlade } from './sliceEngine';
 import { useGameLoop } from './useGameLoop';
+import junBg from './Jun.jpg';
 
 const MAX_LIVES = 3;
 const SPAWN_INTERVAL_START = 1200; // ms at the beginning
@@ -245,6 +246,13 @@ export default function GameCanvas() {
   const [phase, setPhase] = useState('start');
   const [gameOverReason, setGameOverReason] = useState('missed'); // 'missed' | 'bomb'
   const isPointerDown = useRef(false);
+  const bgImageRef = useRef(null);
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = junBg;
+    img.onload = () => { bgImageRef.current = img; };
+  }, []);
 
   const getCanvasSize = () => {
     const canvas = canvasRef.current;
@@ -357,12 +365,18 @@ export default function GameCanvas() {
     // Draw
     ctx.clearRect(0, 0, w, h);
 
-    // Background gradient
-    const bg = ctx.createLinearGradient(0, 0, 0, h);
-    bg.addColorStop(0, '#1a1a2e');
-    bg.addColorStop(1, '#16213e');
-    ctx.fillStyle = bg;
-    ctx.fillRect(0, 0, w, h);
+    // Background image (with dark overlay for readability)
+    if (bgImageRef.current) {
+      ctx.drawImage(bgImageRef.current, 0, 0, w, h);
+      ctx.fillStyle = 'rgba(0,0,0,0.48)';
+      ctx.fillRect(0, 0, w, h);
+    } else {
+      const bg = ctx.createLinearGradient(0, 0, 0, h);
+      bg.addColorStop(0, '#1a1a2e');
+      bg.addColorStop(1, '#16213e');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, w, h);
+    }
 
     s.fruits.forEach(f => drawFruit(ctx, f));
     drawParticles(ctx, s.particles);
@@ -493,7 +507,7 @@ export default function GameCanvas() {
           position: 'absolute', inset: 0,
           display: 'flex', flexDirection: 'column',
           alignItems: 'center', justifyContent: 'center',
-          background: 'radial-gradient(ellipse at 50% 40%, #0f3460 0%, #16213e 55%, #1a1a2e 100%)',
+          background: `linear-gradient(rgba(10,10,30,0.72), rgba(10,10,40,0.80)), url(${junBg}) center/cover no-repeat`,
           color: '#fff',
           userSelect: 'none',
         }}>
@@ -565,7 +579,7 @@ export default function GameCanvas() {
           position: 'absolute', inset: 0,
           display: 'flex', flexDirection: 'column',
           alignItems: 'center', justifyContent: 'center',
-          background: 'rgba(5,5,20,0.82)',
+          background: `linear-gradient(rgba(5,5,20,0.78), rgba(5,5,20,0.85)), url(${junBg}) center/cover no-repeat`,
           backdropFilter: 'blur(6px)',
           color: '#fff',
           userSelect: 'none',
