@@ -11,11 +11,17 @@ export const FRUIT_TYPES = [
 // difficulty: 0 = start, 1 = max (clamped inside). Scales speed only — gravity stays constant.
 export function spawnFruit(canvasWidth, canvasHeight, difficulty = 0) {
   const d = Math.min(1, Math.max(0, difficulty));
+
+  // Bomb chance rises from 12% → 22% as difficulty increases
+  if (Math.random() < 0.12 + d * 0.10) {
+    return spawnBomb(canvasWidth, canvasHeight, d);
+  }
+
   const type = FRUIT_TYPES[Math.floor(Math.random() * FRUIT_TYPES.length)];
   const x = type.radius + Math.random() * (canvasWidth - type.radius * 2);
-  const speedMult = 1 + d * 0.6;                          // up to 1.6× faster at max
+  const speedMult = 1 + d * 0.6;
   const speedY = -(canvasHeight * 0.017 + Math.random() * canvasHeight * 0.008) * speedMult;
-  const speedX = (Math.random() - 0.5) * (4 + d * 2);    // slightly wider arc at high difficulty
+  const speedX = (Math.random() - 0.5) * (4 + d * 2);
 
   return {
     id: Math.random().toString(36).slice(2),
@@ -28,7 +34,31 @@ export function spawnFruit(canvasWidth, canvasHeight, difficulty = 0) {
     rotation: 0,
     rotSpeed: (Math.random() - 0.5) * 0.1,
     sliced: false,
-    halves: null,       // populated on slice
+    opacity: 1,
+  };
+}
+
+function spawnBomb(canvasWidth, canvasHeight, d) {
+  const radius = 28;
+  const x = radius + Math.random() * (canvasWidth - radius * 2);
+  const speedMult = 1 + d * 0.5;
+  const speedY = -(canvasHeight * 0.016 + Math.random() * canvasHeight * 0.007) * speedMult;
+  const speedX = (Math.random() - 0.5) * 3;
+
+  return {
+    id: Math.random().toString(36).slice(2),
+    isBomb: true,
+    name: 'bomb',
+    color: '#1a1a1a',
+    radius,
+    x,
+    y: canvasHeight + radius,
+    speedX,
+    speedY,
+    gravity: 0.35,
+    rotation: 0,
+    rotSpeed: (Math.random() - 0.5) * 0.06,
+    sliced: false,
     opacity: 1,
   };
 }
