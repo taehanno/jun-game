@@ -4,11 +4,76 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jun's Slice Game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { background: #1a1a2e; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
+      body { background: #1a1a2e; overflow: hidden; font-family: 'Nunito', 'Segoe UI', sans-serif; }
+
+      @keyframes popIn {
+        0%   { opacity: 0; transform: scale(0.7); }
+        70%  { transform: scale(1.06); }
+        100% { opacity: 1; transform: scale(1); }
+      }
+      @keyframes floatY {
+        0%, 100% { transform: translateY(0); }
+        50%       { transform: translateY(-10px); }
+      }
+      @keyframes pulse {
+        0%, 100% { box-shadow: 0 6px 28px rgba(231,76,60,0.55); }
+        50%       { box-shadow: 0 6px 48px rgba(231,76,60,0.9); }
+      }
+      @keyframes fadeSlideUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes shimmer {
+        0%   { background-position: -200% center; }
+        100% { background-position:  200% center; }
+      }
+
+      .overlay-card {
+        background: linear-gradient(160deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+        border: 2px solid rgba(255,255,255,0.08);
+        border-radius: 28px;
+        padding: 40px 48px;
+        animation: popIn 0.4s cubic-bezier(.34,1.56,.64,1) both;
+        box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+        text-align: center;
+        max-width: 480px;
+        width: 90vw;
+      }
+      .arcade-btn {
+        display: inline-block;
+        padding: 16px 52px;
+        font-family: 'Fredoka One', cursive;
+        font-size: 24px;
+        letter-spacing: 1px;
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: transform 0.1s;
+        animation: pulse 2s ease-in-out infinite;
+      }
+      .arcade-btn:active { transform: scale(0.94) !important; }
+      .arcade-btn-secondary {
+        display: inline-block;
+        padding: 12px 36px;
+        font-family: 'Nunito', sans-serif;
+        font-size: 17px;
+        font-weight: 800;
+        color: rgba(255,255,255,0.75);
+        background: rgba(255,255,255,0.08);
+        border: 2px solid rgba(255,255,255,0.15);
+        border-radius: 50px;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.1s;
+      }
+      .arcade-btn-secondary:hover  { background: rgba(255,255,255,0.14); }
+      .arcade-btn-secondary:active { transform: scale(0.95); }
     </style>
-    <script type="module" crossorigin src="/jun-game/assets/index-D-vzIeYZ.js"></script>
+    <script type="module" crossorigin src="/jun-game/assets/index-gr8Vc-zS.js"></script>
   </head>
   <body>
     <div id="root"></div>
